@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useLocation, useParams } from 'react-router-dom';
-
+import axios from 'axios';
 const Drug = () => {
     const params = useParams();
     const location = useLocation();
     const state = location.state || {};
-    console.log(params.id,"params",state)
+
   return (
     <div className='drugPage'>
          <h1> Name of the Drug: {state.name}</h1>

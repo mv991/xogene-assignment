@@ -32,11 +32,15 @@ const getData = (dataToChange) => {
          .then(res =>{ 
             console.log(res,"res1");
             if(!res.data.drugGroup.hasOwnProperty('conceptGroup')) {
-                console.log("ran")
+              
                 axios.get(`https://rxnav.nlm.nih.gov/REST/spellingsuggestions.json?name=${name}`).then(res => {
                     console.log(res.data.suggestionGroup.suggestionList.hasOwnProperty('suggestion') ,"Property")
                     if(res.data.suggestionGroup.suggestionList.hasOwnProperty('suggestion')) {
-                        setData(res.data.suggestionGroup.suggestionList.suggestion)
+                        axios.get(`https://rxnav.nlm.nih.gov/REST/drugs.json?name=${res.data.suggestionGroup.suggestionList.suggestion}`)
+                        .then(res => {
+                            getData(res.data.drugGroup.conceptGroup)
+                        })
+                        
                     }
                     else {
                         setData([]);
@@ -70,7 +74,7 @@ const getData = (dataToChange) => {
       <div className='results'>
            {data.map((nameData,index) => {
             
-      return   nameData.name? <Link to= {`/drug/${nameData.name}` } state={nameData}  key={index}> <p>{nameData.name}</p></Link>:<Link to= {`/drug/${nameData}` } state={nameData}  key={index}> <p>{nameData}</p></Link>
+      return  <Link to= {`/drug/${nameData.name}` } state={nameData}  key={index}> <p>{nameData.name}</p></Link>
       })}
       
       </div>
